@@ -93,6 +93,8 @@ export class DynamicSvmWalletProvider extends SvmWalletProvider {
   public static async configureWithWallet(
     config: DynamicSvmWalletConfig,
   ): Promise<DynamicSvmWalletProvider> {
+    const { ThresholdSignatureScheme } = await import("@dynamic-labs-wallet/node");
+    const thresholdSignatureScheme = ThresholdSignatureScheme.TWO_OF_TWO;
     console.log("[DynamicSvmWalletProvider] Starting wallet configuration with config:", {
       networkId: config.networkId,
       chainType: config.chainType,
@@ -104,6 +106,7 @@ export class DynamicSvmWalletProvider extends SvmWalletProvider {
       const { wallet, dynamic } = await createDynamicWallet({
         ...config,
         chainType: "solana",
+        thresholdSignatureScheme,
       });
 
       console.log("[DynamicSvmWalletProvider] Wallet created:", {

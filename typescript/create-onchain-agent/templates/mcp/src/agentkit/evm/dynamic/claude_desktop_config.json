@@ -1,0 +1,35 @@
+{
+  "name": "Dynamic EVM Wallet Agent",
+  "description": "An agent configured with a Dynamic EVM wallet.",
+  "iconUrl": "https://example.com/dynamic-evm-icon.png",
+  "providerName": "Dynamic",
+  "protocol": "evm",
+  "getAgentKit": "./agentkit/evm/dynamic/getAgentKit.js",
+  "environmentVariables": [
+    {
+      "name": "DYNAMIC_AUTH_TOKEN",
+      "description": "Your Dynamic authentication token.",
+      "required": true
+    },
+    {
+      "name": "DYNAMIC_ENVIRONMENT_ID",
+      "description": "Your Dynamic environment ID.",
+      "required": true
+    },
+    {
+      "name": "DYNAMIC_BASE_API_URL",
+      "description": "Dynamic base API URL (optional).",
+      "required": false
+    },
+    {
+      "name": "DYNAMIC_BASE_MPC_RELAY_API_URL",
+      "description": "Dynamic base MPC relay API URL (optional).",
+      "required": false
+    },
+    {
+      "name": "NETWORK_ID",
+      "description": "The chain ID for the EVM network (optional, defaults to Ethereum mainnet).",
+      "required": false
+    }
+  ]
+} 

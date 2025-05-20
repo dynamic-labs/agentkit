@@ -65,9 +65,11 @@ export class DynamicEvmWalletProvider extends ViemWalletProvider {
   public static async configureWithWallet(
     config: DynamicEvmWalletConfig,
   ): Promise<DynamicEvmWalletProvider> {
+    const thresholdSignatureScheme = ThresholdSignatureScheme.TWO_OF_TWO;
     const { wallet, dynamic } = await createDynamicWallet({
       ...config,
       chainType: "ethereum",
+      thresholdSignatureScheme,
     });
 
     const chainId = config.chainId || "84532";

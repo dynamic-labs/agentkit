@@ -203,6 +203,7 @@ export async function initProject() {
               Viem: "Client-side Ethereum wallet.",
               Privy: "Authentication and wallet infrastructure.",
               SolanaKeypair: "Client-side Solana wallet.",
+              Dynamic: "Uses Dynamic's Server Wallets.",
             };
 
             const providerDescriptions = getWalletProviders(network as Network)

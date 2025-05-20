@@ -1,4 +1,4 @@
-import {
+import type {
   AgentkitRouteConfiguration,
   PrepareAgentkitRouteConfiguration,
   MCPRouteConfiguration,
@@ -28,26 +28,28 @@ export type Network = EVMNetwork | SVMNetwork;
 const CDP_SUPPORTED_EVM_WALLET_PROVIDERS = ["SmartWallet", "CDP", "Viem", "Privy"] as const;
 const SVM_WALLET_PROVIDERS = ["SolanaKeypair", "Privy"] as const;
 export const NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS = ["Viem", "Privy"] as const;
+const DYNAMIC_WALLET_PROVIDERS = ["Dynamic"] as const;
 
 export type WalletProviderChoice =
   | (typeof CDP_SUPPORTED_EVM_WALLET_PROVIDERS)[number]
   | (typeof SVM_WALLET_PROVIDERS)[number]
-  | (typeof NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS)[number];
+  | (typeof NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS)[number]
+  | (typeof DYNAMIC_WALLET_PROVIDERS)[number];
 
 export const NetworkToWalletProviders: Record<Network, readonly WalletProviderChoice[]> = {
-  "arbitrum-mainnet": CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "arbitrum-sepolia": NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "base-mainnet": CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "base-sepolia": CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "ethereum-mainnet": CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "ethereum-sepolia": NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "optimism-mainnet": NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "optimism-sepolia": NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "polygon-mainnet": CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "polygon-mumbai": NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
-  "solana-mainnet": SVM_WALLET_PROVIDERS,
-  "solana-devnet": SVM_WALLET_PROVIDERS,
-  "solana-testnet": SVM_WALLET_PROVIDERS,
+  "arbitrum-mainnet": [...CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "arbitrum-sepolia": [...NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "base-mainnet": [...CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "base-sepolia": [...CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "ethereum-mainnet": [...CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "ethereum-sepolia": [...NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "optimism-mainnet": [...NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "optimism-sepolia": [...NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "polygon-mainnet": [...CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "polygon-mumbai": [...NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "solana-mainnet": [...SVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "solana-devnet": [...SVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
+  "solana-testnet": [...SVM_WALLET_PROVIDERS, ...DYNAMIC_WALLET_PROVIDERS],
 };
 
 export const Networks: Network[] = [...EVM_NETWORKS, ...SVM_NETWORKS];
@@ -57,6 +59,7 @@ export const WalletProviderChoices: WalletProviderChoice[] = [
     ...CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
     ...NON_CDP_SUPPORTED_EVM_WALLET_PROVIDERS,
     ...SVM_WALLET_PROVIDERS,
+    ...DYNAMIC_WALLET_PROVIDERS,
   ]),
 ];
 
@@ -113,6 +116,22 @@ export const AgentkitRouteConfigurations: Record<
       },
       prepareAgentkitRoute: "evm/smart/prepare-agentkit.ts",
     },
+    Dynamic: {
+      env: {
+        topComments: [
+          "Get keys from Dynamic Dashboard: https://app.dynamic.xyz/",
+          "Get keys from CDP Portal: https://portal.cdp.coinbase.com/",
+        ],
+        required: ["DYNAMIC_AUTH_TOKEN", "DYNAMIC_ENVIRONMENT_ID"],
+        optional: [
+          "DYNAMIC_BASE_API_URL",
+          "DYNAMIC_BASE_MPC_RELAY_API_URL",
+          "CDP_API_KEY_NAME",
+          "CDP_API_KEY_PRIVATE_KEY",
+        ],
+      },
+      prepareAgentkitRoute: "evm/dynamic/prepare-agentkit.ts",
+    },
   },
   CUSTOM_EVM: {
     Viem: {
@@ -155,6 +174,22 @@ export const AgentkitRouteConfigurations: Record<
         ],
       },
       prepareAgentkitRoute: "svm/privy/prepare-agentkit.ts",
+    },
+    Dynamic: {
+      env: {
+        topComments: [
+          "Get keys from Dynamic Dashboard: https://app.dynamic.xyz/",
+          "Get keys from CDP Portal: https://portal.cdp.coinbase.com/",
+        ],
+        required: ["DYNAMIC_AUTH_TOKEN", "DYNAMIC_ENVIRONMENT_ID"],
+        optional: [
+          "DYNAMIC_BASE_API_URL",
+          "DYNAMIC_BASE_MPC_RELAY_API_URL",
+          "CDP_API_KEY_NAME",
+          "CDP_API_KEY_PRIVATE_KEY",
+        ],
+      },
+      prepareAgentkitRoute: "svm/dynamic/prepare-agentkit.ts",
     },
   },
 };
@@ -212,6 +247,10 @@ export const MCPRouteConfigurations: Record<
       getAgentkitRoute: "evm/smart/getAgentKit.ts",
       configRoute: "evm/smart/claude_desktop_config.json",
     },
+    Dynamic: {
+      getAgentkitRoute: "evm/dynamic/getAgentKit.ts",
+      configRoute: "evm/dynamic/claude_desktop_config.json",
+    },
   },
   CUSTOM_EVM: {
     Viem: {
@@ -227,6 +266,10 @@ export const MCPRouteConfigurations: Record<
     Privy: {
       getAgentkitRoute: "svm/privy/getAgentKit.ts",
       configRoute: "svm/privy/claude_desktop_config.json",
+    },
+    Dynamic: {
+      getAgentkitRoute: "svm/dynamic/getAgentKit.ts",
+      configRoute: "svm/dynamic/claude_desktop_config.json",
     },
   },
 };

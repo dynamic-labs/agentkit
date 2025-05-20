@@ -1,0 +1,35 @@
+{
+  "name": "Dynamic SVM Wallet Agent",
+  "description": "An agent configured with a Dynamic SVM wallet.",
+  "iconUrl": "https://example.com/dynamic-svm-icon.png",
+  "providerName": "Dynamic",
+  "protocol": "svm",
+  "getAgentKit": "./agentkit/svm/dynamic/getAgentKit.js",
+  "environmentVariables": [
+    {
+      "name": "DYNAMIC_AUTH_TOKEN",
+      "description": "Your Dynamic authentication token.",
+      "required": true
+    },
+    {
+      "name": "DYNAMIC_ENVIRONMENT_ID",
+      "description": "Your Dynamic environment ID.",
+      "required": true
+    },
+    {
+      "name": "DYNAMIC_BASE_API_URL",
+      "description": "Dynamic base API URL (optional).",
+      "required": false
+    },
+    {
+      "name": "DYNAMIC_BASE_MPC_RELAY_API_URL",
+      "description": "Dynamic base MPC relay API URL (optional).",
+      "required": false
+    },
+    {
+      "name": "NETWORK_ID",
+      "description": "The network ID for the SVM network (e.g., mainnet-beta, devnet, optional, defaults to Solana mainnet-beta).",
+      "required": false
+    }
+  ]
+} 
